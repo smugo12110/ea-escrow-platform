@@ -47,7 +47,7 @@ bash deploy.sh
 # 4. Configure DNS
 # Point your domain to EC2 instance IP
 ```
-
+#chrome launch
 ### Docker Deployment
 
 ```bash
@@ -139,4 +139,3 @@ MIT License - See LICENSE file
 
 ---
 
-**Made with ❤️ for cross-border commerce**
