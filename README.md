@@ -16,6 +16,7 @@ A professional cross-border escrow platform with M-Pesa integration, built for p
 # Clone repository
 git clone https://github.com/smugo12110/ea-escrow-platform.git
 cd ea-escrow-platform
+
 20046175a03c31ebbde2bce8f1296e99ef5417ba
 # Install dependencies
 npm install
@@ -176,4 +177,4 @@ MIT License - See LICENSE file
 ✅ Deployed
 
 ---
-
+// OpenZeppelin Contracts (last updated v5.4.0) (token/ERC20/IERC20.sol)
