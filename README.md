@@ -38,7 +38,45 @@ npm run dev
 # 1. Launch EC2 instance (Ubuntu 22.04 LTS)
 # 2. SSH into instance
 ssh -i your-key.pem ubuntu@your-instance-ip
+For **CrossBorderEscrow.sol**, the likely compile-time issue is missing Solidity dependencies:
 
+```solidity
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+```
+
+An npm compile with `solc` may fail unless `@openzeppelin/contracts` is installed and import resolution is configured.
+
+### Root cause
+
+`package.json` does **not** include `@openzeppelin/contracts` or `solc`, so the contract cannot resolve the imports. Also, `npm run compile-contracts` uses the raw `solc` executable and no OpenZeppelin import remapping.
+
+### Suggested fix
+
+```bash
+npm install --save-dev solc @openzeppelin/contracts
+npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
+npx hardhat compile
+```
+
+Add a minimal `hardhat.config.js`:
+
+```javascript
+module.exports = {
+  solidity: "0.8.20"
+};
+```
+
+Before production use, also improve the contract:
+
+- Emit **EscrowFunded** only after `transferFrom` succeeds.
+- Store a `funded`/escrow state before external calls, or follow checks-effects-interactions to reduce reentrancy risk.
+- Validate `seller != address(0)`.
+- Validate `token != address(0)`.
+- Add a refund or cancellation mechanism where appropriate.
+- Add tests for duplicate escrow IDs, failed transfers, unauthorized release, and state changes.
+
+A compile error here is primarily **dependency/setup**, not application logic.
 # 3. Clone and deploy
 git clone https://github.com/smugo12110/ea-escrow-platform.git
 cd ea-escrow-platform
